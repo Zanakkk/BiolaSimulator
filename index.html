@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Violin Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🎻 Violin Simulator</h1>
+  <div class="row">
+    <button id="mFree" class="on">Main bebas</button>
+    <button id="mWait">Belajar</button>
+    <button id="mDemo">Demo</button>
+    <button id="bHear">Dengar nada</button>
+    <button id="bReset">Ulang</button>
+  </div>
+  <div class="row">
+    <select id="songSel"></select>
+    <label class="filebtn">📂 Muat MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi"></label>
+    <select id="trackSel" style="display:none"></select>
+    <label class="s">Kecepatan <input id="speed" type="range" min="25" max="150" value="70"><span id="speedV">70%</span></label>
+    <label class="s"><input id="vib" type="checkbox" checked> Vibrato</label>
+  </div>
+</header>
+<div id="info"><span id="hint">Sentuh dan geser di fingerboard. Pilih lagu lalu mode Belajar.</span><span id="stat"></span></div>
+<div id="bar"><i id="barfill"></i></div>
+<div id="strip"></div>
+<main><div id="board"></div></main>
+<div id="msg"><div><h2 id="msgT"></h2><p id="msgP"></p><button id="msgOk">OK</button></div></div>
+<script src="midi.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
