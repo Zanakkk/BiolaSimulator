@@ -3,33 +3,97 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Violin Simulator</title>
+<title>Biola & Launchpad</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>🎻 Violin Simulator</h1>
-  <div class="row">
+
+<section id="home">
+  <div class="homebox">
+    <h1>Studio Nada</h1>
+    <p>Mainkan, belajar, dan buat nada dengan dua instrumen.</p>
+    <button class="big" id="goViolin"><span>🎻</span><b>Biola</b><small>Fingerboard 4 senar, glide, belajar lagu</small></button>
+    <button class="big" id="goPad"><span>🎹</span><b>Launchpad</b><small>8 mode: Session, Note, Chord, Drum, Step, Fader, Arp</small></button>
+    <p class="mini">Keduanya bisa impor MIDI dan generate nada, lalu menunjukkan mana yang harus ditekan.</p>
+  </div>
+</section>
+
+<section id="app" hidden>
+  <header>
+    <button id="bHome" title="Beranda">⌂</button>
+    <div class="tabs"><button id="tViolin">🎻 Biola</button><button id="tPad">🎹 Launchpad</button></div>
+    <button id="bSong">♫ Lagu</button>
+    <button id="bSet">⚙</button>
+  </header>
+  <div class="row modes">
     <button id="mFree" class="on">Main bebas</button>
     <button id="mWait">Belajar</button>
     <button id="mDemo">Demo</button>
-    <button id="bHear">Dengar nada</button>
+    <button id="bHear">Dengar</button>
     <button id="bReset">Ulang</button>
   </div>
-  <div class="row">
-    <select id="songSel"></select>
-    <label class="filebtn">📂 Muat MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi"></label>
-    <select id="trackSel" style="display:none"></select>
-    <label class="s">Kecepatan <input id="speed" type="range" min="25" max="150" value="70"><span id="speedV">70%</span></label>
-    <label class="s"><input id="vib" type="checkbox" checked> Vibrato</label>
+  <div id="info"><span id="hint"></span><span id="stat"></span></div>
+  <div id="bar"><i id="barfill"></i></div>
+  <div id="strip"></div>
+
+  <main>
+    <div id="violinView" hidden><div id="board"></div></div>
+    <div id="padView" hidden>
+      <div id="padWrap">
+        <div id="wheel" title="Pitch bend"><i></i><div id="wthumb"></div></div>
+        <div id="padgrid"></div>
+      </div>
+      <div id="padStatus"></div>
+      <div id="transport">
+        <button id="tpPlay">▶ Play</button>
+        <label class="s">BPM <input id="tpBpm" type="range" min="60" max="180" value="120"><span id="tpBpmV">120</span></label>
+      </div>
+    </div>
+  </main>
+</section>
+
+<div class="sheet" id="songSheet"><div class="sheetbox">
+  <button class="close">✕</button>
+  <h3>Lagu</h3>
+  <div class="row"><select id="songSel"></select>
+    <label class="filebtn">📂 Muat MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi"></label></div>
+  <div class="row"><select id="trackSel" style="display:none"></select></div>
+  <label class="s">Kecepatan <input id="speed" type="range" min="25" max="150" value="70"><span id="speedV">70%</span></label>
+  <label class="s"><input id="vib" type="checkbox" checked> Vibrato</label>
+  <h3>🎲 Generate nada</h3>
+  <div class="grid2">
+    <label>Nada dasar<select id="genRoot"></select></label>
+    <label>Skala<select id="genScale"></select></label>
+    <label>Panjang<select id="genCount"><option value="8">8 nada</option><option value="16" selected>16 nada</option><option value="24">24 nada</option><option value="32">32 nada</option></select></label>
+    <label>Kesulitan<select id="genHard"><option value="1">Mudah (langkah dekat)</option><option value="2">Sedang</option><option value="3">Sulit (lompatan)</option></select></label>
   </div>
-</header>
-<div id="info"><span id="hint">Sentuh dan geser di fingerboard. Pilih lagu lalu mode Belajar.</span><span id="stat"></span></div>
-<div id="bar"><i id="barfill"></i></div>
-<div id="strip"></div>
-<main><div id="board"></div></main>
+  <button id="bGen" class="on">Generate & mulai Belajar</button>
+  <p class="mini">Nada dibuat acak pada skala pilihan dan selalu berakhir di nada dasar. Tekan lagi untuk melodi baru.</p>
+</div></div>
+
+<div class="sheet" id="setSheet"><div class="sheetbox">
+  <button class="close">✕</button>
+  <h3>Pengaturan Launchpad</h3>
+  <div class="grid2">
+    <label>Suara<select id="padInst"></select></label>
+    <label>Nada dasar<select id="padRoot"></select></label>
+    <label>Skala<select id="padScale"></select></label>
+    <label>Layout Note<select id="padOff"></select></label>
+    <label>Layout Chrom<select id="padChOff"></select></label>
+    <label>Arp pola<select id="arpPat"></select></label>
+    <label>Arp kecepatan<select id="arpRate"></select></label>
+  </div>
+  <p class="mini">Tombol kanan di mode Note/Chrom/Chord/Arp: 8▲▼ oktaf, ♯♭ transpose, ⤴⤵ pitch bend (tahan), Sus sustain/latch, Vel velocity. Roda di kiri grid = pitch bend bebas.</p>
+</div></div>
+
 <div id="msg"><div><h2 id="msgT"></h2><p id="msgP"></p><button id="msgOk">OK</button></div></div>
+
 <script src="midi.js"></script>
+<script src="music.js"></script>
+<script src="audio.js"></script>
+<script src="learn.js"></script>
+<script src="violin.js"></script>
+<script src="launchpad.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
